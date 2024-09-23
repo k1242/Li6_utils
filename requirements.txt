@@ -2,5 +2,4 @@ streamlit
 ARC-Alkali-Rydberg-Calculator
 pandas
 numpy
-math
 scipy
