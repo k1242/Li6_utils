@@ -2,7 +2,7 @@
 import pandas as pd
 import streamlit as st
 import math
-from scipy.constants import epsilon_0, speed_of_light, h
+from scipy.constants import epsilon_0, speed_of_light, h, k
 from arc import Lithium6, DynamicPolarizability
 
 # Constants
@@ -69,13 +69,23 @@ deltaE = get_deltaE(wavelength_input, power_input, waist_input)
 omega_r = get_omega_r(U0, waist_input)
 omega_z = get_omega_z(U0, wavelength_input, waist_input)
 
-# Create a dataframe for displaying results
-data = pd.DataFrame({
-    "Parameter": ["Trap depth", "Excitation energy", "Trap frequency: radial", "Trap frequency: axial", "Trap frequency: ratio"],
-    "Symbol": ["U₀", "ΔE", "ω_r", "ω_z", "ω_r / ω_z"],
-    "Value": [U0 / h * 1e-6, deltaE * 1e-6, omega_r / (2 * math.pi) * 1e-3, omega_z / (2 * math.pi) * 1e-3, omega_r / omega_z],
-    "Units": ["MHz", "MHz", "kHz", "kHz", ""]
-})
+# 
+on = st.sidebar.toggle("Switch to temperature")
 
-# Display the data
+# Create a dataframe for displaying results
+if not on:
+    data = pd.DataFrame({
+        "Parameter": ["Trap depth", "D2 detuning", "Trap frequency: radial", "Trap frequency: axial", "Trap frequency: ratio"],
+        "Symbol": ["U₀", "ΔE", "ω_r / 2π", "ω_z / 2π", "ω_r / ω_z"],
+        "Value": [U0 / h * 1e-6, deltaE * 1e-6, omega_r / (2 * math.pi) * 1e-3, omega_z / (2 * math.pi) * 1e-3, omega_r / omega_z],
+        "Units": ["MHz", "MHz", "kHz", "kHz", ""]
+    })
+else:
+    data = pd.DataFrame({
+        "Parameter": ["Trap depth", "D2 detuning", "Trap frequency: radial", "Trap frequency: axial", "Trap frequency: ratio"],
+        "Symbol": ["U₀", "ΔE", "ω_r / 2π", "ω_z / 2π", "ω_r / ω_z"],
+        "Value": [U0 / k * 1e6, deltaE * 1e-6, omega_r / (2 * math.pi) * 1e-3, omega_z / (2 * math.pi) * 1e-3, omega_r / omega_z],
+        "Units": ["μK", "MHz", "kHz", "kHz", ""]
+    })
+
 st.write(data)
