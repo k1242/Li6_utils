@@ -1,5 +1,5 @@
 streamlit
 ARC-Alkali-Rydberg-Calculator
 pandas
-numpy
+numpy<2
 scipy
